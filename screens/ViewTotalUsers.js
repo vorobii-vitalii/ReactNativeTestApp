@@ -7,6 +7,8 @@ import {connect} from 'react-redux'
 
 import {addUsers,provideSeed,providePage} from '../redux/actions'
 
+import {compareUsers} from '../helperFunctions'
+
 
 const loadMoreConstant=10;
 
@@ -14,6 +16,7 @@ class ViewTotalUsers extends React.Component{
 
     state={
         loadedNum:0,
+        sortedNum:0
     }
 
     fillUsers=async (result)=>{
@@ -33,6 +36,17 @@ class ViewTotalUsers extends React.Component{
     addConstant=()=>{
         this.setState(prevState=>({
             loadedNum:prevState.loadedNum+loadMoreConstant
+        }))
+    }
+
+    sorted = ()=>{
+        const sorted=this.props.users.slice(0,this.state.sortedNum).sort(compareUsers);
+        return sorted;
+    }
+
+    sort=()=>{
+        this.setState(prevState=>({
+            sortedNum:prevState.loadedNum
         }))
     }
 
@@ -59,12 +73,19 @@ class ViewTotalUsers extends React.Component{
         this.props.navigation.push('Add user');
     }
 
+    getUsers=()=>{
+        console.log(this.sorted());
+        console.log(this.props.users.slice(this.state.sortedNum-1,this.state.loadedNum));
+        return [ ...this.sorted() , ...this.props.users.slice(this.state.sortedNum,this.state.loadedNum) ];
+    }
+
     render(){
         return (
             <ScrollView>
                 <Button onPress={this.addUser} title="Add new user" />
+                <Button onPress={this.sort} title="Sort" />
                 <ListUsers 
-                    users={this.props.users.slice(0,this.state.loadedNum)} 
+                    users={this.getUsers()} 
                     onSingleUserPress={this.onSingleUserPress}
                     canLoadMore={true}
                     onLoadMore={this.provideUsers}

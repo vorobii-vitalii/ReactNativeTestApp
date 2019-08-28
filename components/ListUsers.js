@@ -17,7 +17,7 @@ const styles=StyleSheet.create({
 export default class ListUsers extends React.Component{
 
     representSingleUser=({item})=>(
-        <SingleUser user={item}onSingleUserPress={this.onSingleUserPress}   />
+        <SingleUser user={item} onSingleUserPress={this.onSingleUserPress}   />
     )
 
     onSingleUserPress=(user)=>{

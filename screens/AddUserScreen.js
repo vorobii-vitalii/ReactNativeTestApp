@@ -1,5 +1,5 @@
 import React from 'react'
-import {View,TextInput,Text,Button,StyleSheet} from 'react-native'
+import {View,TextInput,Text,Button,StyleSheet,} from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -11,7 +11,20 @@ import {addUser} from '../redux/actions'
 const styles=StyleSheet.create({
     block:{
         flex:1,
-        padding:20
+        padding:20,
+        alignItems:"center"
+    },
+    text: {
+        textAlign: 'center',
+    },
+    error: {
+        textAlign: 'center',
+        color: 'red',
+    },
+    centered:{
+        alignSelf:'center',
+        padding:10,
+        width:"70%"
     }
 })
 
@@ -52,7 +65,7 @@ class AddUserScreen extends React.Component{
     add=async ()=>{
         const {first,last,image} = this.state; 
         
-        if(first === '' || last === ''){
+        if(first === '' || last === '' || image===''){
             this.setState({
                 err:"Empty fields detected"
             })
@@ -61,7 +74,7 @@ class AddUserScreen extends React.Component{
 
         const newUserObject={
             name:{
-                first,last
+                first:first.toLowerCase(),last:last.toLowerCase()
             },
             picture:{
                 medium:image,
@@ -70,9 +83,7 @@ class AddUserScreen extends React.Component{
         }
 
         await this.props.addUser(newUserObject);
-        this.setState({
-            err:""
-        })
+        this.props.navigation.goBack();
 
     }
 
@@ -81,12 +92,14 @@ class AddUserScreen extends React.Component{
         return (
             <View style={styles.block}>
                     <Text>{this.state.err}</Text>
-                    <TextInput value={first} onChangeText={this.genericTextHandler("first")} placeholder="Enter First name" />
-                    <TextInput value={last} onChangeText={this.genericTextHandler("last")} placeholder="Enter Last name" />
+                    <TextInput value={first} style={{borderWidth:2,padding:15,margin:10}} onChangeText={this.genericTextHandler("first")} placeholder="Enter First name" />
+                    <TextInput value={last} style={{borderWidth:2,padding:15,margin:10}} onChangeText={this.genericTextHandler("last")} placeholder="Enter Last name" />
+                    <View style={styles.centered}>
                     <Button
-                    title="Pick an user image from gallery"
-                    onPress={this._pickImage}
+                        title="Pick an user image from gallery"
+                        onPress={this._pickImage}
                     />
+                    </View>
                     <Button onPress={this.add} title="Add new user" />
             </View>
         )

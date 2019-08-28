@@ -44,16 +44,14 @@ class SignUpScreen extends React.Component {
             await this.saveToGallery(image);
             await this.switchToLogin();
         }
-        await this.setState({
-            err:"Profile with such username already exists"
-        })
+
     }
 
-    componentDidMount() {
-        FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
-          console.log(e, 'Directory exists');
-        });
-      }
+    // componentDidMount() {
+    //     FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
+    //       console.log(e, 'Directory exists');
+    //     });
+    //   }
 
     saveToGallery=async (url)=>{
         await MediaLibrary.createAssetAsync(url);
